@@ -70,39 +70,16 @@ void mostrarProcesos(Proceso* cabeza) {
 }
 
 void eliminarProceso(Proceso*& cabeza, int id) {
-<<<<<<< HEAD
     if (!cabeza) { cout << "Lista vacia.\n"; return; }
-=======
-    // Verificar si la lista está vacía
-    if (cabeza == NULL) {
-        cout << "?? No hay procesos para eliminar.\n";
-        return;
-    }
-
->>>>>>> 39bb7ad1f0794c7d2b5002a688467fbf76582629
     Proceso* actual = cabeza;
     Proceso* anterior = NULL;
     while (actual && actual->id != id) {
         anterior = actual;
         actual = actual->siguiente;
     }
-<<<<<<< HEAD
     if (!actual) { cout << "No encontrado.\n"; return; }
     if (!anterior) cabeza = actual->siguiente;
     else anterior->siguiente = actual->siguiente;
-=======
-
-    if (actual == NULL) {
-        cout << "? No se encontr� el proceso con ID " << id << ".\n";
-        return;
-    }
-
-    if (anterior == NULL)
-        cabeza = actual->siguiente;
-    else
-        anterior->siguiente = actual->siguiente;
-
->>>>>>> 39bb7ad1f0794c7d2b5002a688467fbf76582629
     delete actual;
     cout << "Proceso eliminado.\n";
 }
@@ -116,11 +93,7 @@ void modificarPrioridad(Proceso* cabeza, int id, int nueva) {
         }
         cabeza = cabeza->siguiente;
     }
-<<<<<<< HEAD
     cout << "No se encontro el proceso.\n";
-=======
-    cout << "? No se encontr� el proceso con ID " << id << ".\n";
->>>>>>> 39bb7ad1f0794c7d2b5002a688467fbf76582629
 }
 
 // ============================
@@ -128,7 +101,6 @@ void modificarPrioridad(Proceso* cabeza, int id, int nueva) {
 // ============================
 
 void encolar(NodoCola*& frente, NodoCola*& fin, int id, string nombre, int prioridad) {
-        // Crear nuevo nodo para la cola
     NodoCola* nuevo = new NodoCola{id, nombre, prioridad, NULL};
     if (!frente || prioridad > frente->prioridad) {
         nuevo->siguiente = frente;
@@ -138,7 +110,6 @@ void encolar(NodoCola*& frente, NodoCola*& fin, int id, string nombre, int prior
         NodoCola* aux = frente;
         while (aux->siguiente && aux->siguiente->prioridad >= prioridad)
             aux = aux->siguiente;
-        // Insertar en la posición encontrada
         nuevo->siguiente = aux->siguiente;
         aux->siguiente = nuevo;
         if (!nuevo->siguiente) fin = nuevo;
@@ -146,37 +117,18 @@ void encolar(NodoCola*& frente, NodoCola*& fin, int id, string nombre, int prior
 }
 
 void mostrarCola(NodoCola* frente) {
-<<<<<<< HEAD
     if (!frente) { cout << "Cola vacia.\n"; return; }
     mostrarTitulo("COLA DE PRIORIDAD");
     while (frente) {
         cout << "ID: " << frente->id << " | Nombre: " << frente->nombre
-=======
-    if (frente == NULL) {
-        cout << "?? La cola est� vac�a.\n";
-        return;
-    }
-    cout << "\n--- COLA DE PRIORIDAD ---\n";
-    while (frente != NULL) {
-        cout << "ID: " << frente->id
-             << " | Nombre: " << frente->nombre
->>>>>>> 39bb7ad1f0794c7d2b5002a688467fbf76582629
              << " | Prioridad: " << frente->prioridad << endl;
         frente = frente->siguiente;
     }
 }
 
 void desencolar(NodoCola*& frente, NodoCola*& fin) {
-<<<<<<< HEAD
     if (!frente) { cout << "No hay procesos.\n"; return; }
     cout << "Ejecutando: " << frente->nombre << endl;
-=======
-    if (frente == NULL) {
-        cout << "?? No hay procesos en la cola.\n";
-        return;
-    // Eliminar el proceso del frente (mayor prioridad)
-    }
->>>>>>> 39bb7ad1f0794c7d2b5002a688467fbf76582629
     NodoCola* temp = frente;
     frente = frente->siguiente;
     if (!frente) fin = NULL;
@@ -201,21 +153,10 @@ void pop(Bloque*& tope) {
 }
 
 void mostrarMemoria(Bloque* tope) {
-<<<<<<< HEAD
     if (!tope) { cout << "Sin bloques asignados.\n"; return; }
     mostrarTitulo("ESTADO DE MEMORIA");
     while (tope) {
         cout << "Proceso: " << tope->proceso << " | Tamanio: " << tope->tamanio << " MB\n";
-=======
-    if (tope == NULL) {
-        cout << "?? No hay bloques de memoria asignados.\n";
-        return;
-    }
-    cout << "\n--- ESTADO DE MEMORIA ---\n";
-    while (tope != NULL) {
-        cout << "Proceso: " << tope->proceso
-             << " | Tama�o: " << tope->tamanio << " MB\n";
->>>>>>> 39bb7ad1f0794c7d2b5002a688467fbf76582629
         tope = tope->siguiente;
     }
 }
@@ -247,25 +188,8 @@ int main() {
     int opcion;
 
     do {
-<<<<<<< HEAD
         mostrarMenu();
         cout << "Seleccione una opcion: ";
-=======
-        limpiarPantalla();
-        cout << "===== SISTEMA DE GESTI�N DE PROCESOS =====\n";
-        cout << "1. Registrar proceso\n";
-        cout << "2. Eliminar proceso\n";
-        cout << "3. Mostrar lista de procesos\n";
-        cout << "4. Modificar prioridad de proceso\n";
-        cout << "5. Planificar ejecuci�n (encolar)\n";
-        cout << "6. Mostrar cola de CPU\n";
-        cout << "7. Ejecutar proceso (desencolar)\n";
-        cout << "8. Asignar memoria\n";
-        cout << "9. Liberar memoria\n";
-        cout << "10. Mostrar estado de memoria\n";
-        cout << "0. Salir\n";
-        cout << "Seleccione una opci�n: ";
->>>>>>> 39bb7ad1f0794c7d2b5002a688467fbf76582629
         cin >> opcion;
 
         switch (opcion) {
@@ -299,51 +223,23 @@ int main() {
                         encolar(frente, fin, aux->id, aux->nombre, aux->prioridad);
                         aux = aux->siguiente;
                     }
-<<<<<<< HEAD
                     cout << "Procesos encolados.\n";
-=======
-                    cout << "Procesos encolados seg�n prioridad.\n";
->>>>>>> 39bb7ad1f0794c7d2b5002a688467fbf76582629
                 }
                 break;
             }
             case 6: mostrarCola(frente); break;
             case 7: desencolar(frente, fin); break;
             case 8: {
-<<<<<<< HEAD
                 string proc; int tam;
                 cin.ignore(); cout << "Proceso: "; getline(cin, proc);
                 tam = leerNumero("Tamaño (MB): ", 1, 9999);
-=======
-                string proc;
-                int tam;
-                cout << "Proceso: "; getline(cin, proc);
-                cout << "Tama�o (MB): "; cin >> tam;
->>>>>>> 39bb7ad1f0794c7d2b5002a688467fbf76582629
                 push(tope, proc, tam);
                 break;
             }
-<<<<<<< HEAD
             case 9: pop(tope); break;
             case 10: mostrarMemoria(tope); break;
             case 0: cout << "Saliendo...\n"; break;
             default: cout << "Opcion invalida.\n";
-=======
-            case 9:
-                pop(tope);
-                pausa();
-                break;
-            case 10:
-                mostrarMemoria(tope);
-                pausa();
-                break;
-            case 0:
-                cout << "Saliendo del sistema...\n";
-                break;
-            default:
-                cout << "Opci�n no v�lida.\n";
-                pausa();
->>>>>>> 39bb7ad1f0794c7d2b5002a688467fbf76582629
         }
     } while (opcion != 0);
 
