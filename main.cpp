@@ -10,20 +10,20 @@ struct Proceso {
     int id;
     string nombre;
     int prioridad;
-    Proceso* siguiente;
+    Proceso * siguiente;
 };
 
 struct NodoCola {
     int id;
     string nombre;
     int prioridad;
-    NodoCola* siguiente;
+    NodoCola * siguiente;
 };
 
 struct Bloque {
     string proceso;
     int tamanio;
-    Bloque* siguiente;
+    Bloque * siguiente;
 };
 
 // ============================
@@ -35,9 +35,41 @@ int leerNumero(string mensaje, int min, int max) {
     do {
         cout << mensaje;
         cin >> n;
-        if (n < min || n > max) cout << "Valor invalido. (" << min << "-" << max << ")\n";
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Error: Debe ingresar un numero natural.\n";
+            continue;
+        }
+        if (n < min || n > max) {
+            cout << "Valor invalido. (" << min << "-" << max << ")\n";
+        }
     } while (n < min || n > max);
     return n;
+}
+
+int leerID(string mensaje) {
+    int id;
+    while (true) {
+        cout << mensaje;
+        cin >> id;
+        
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "¡Advertencia! Solo se admiten numeros naturales. Intente nuevamente.\n";
+            continue;
+        }
+        
+        if (id <= 0) {
+            cout << "¡Advertencia! El ID debe ser un numero natural (mayor que 0). Intente nuevamente.\n";
+            continue;
+        }
+        
+        cin.ignore();
+        break;
+    }
+    return id;
 }
 
 void mostrarTitulo(string titulo) {
@@ -49,7 +81,7 @@ void mostrarTitulo(string titulo) {
 // ============================
 
 void insertarProceso(Proceso*& cabeza, int id, string nombre, int prioridad) {
-    Proceso* nuevo = new Proceso{id, nombre, prioridad, NULL};
+    Proceso * nuevo = new Proceso{id, nombre, prioridad, NULL};
     if (!cabeza) cabeza = nuevo;
     else {
         Proceso* aux = cabeza;
@@ -71,8 +103,8 @@ void mostrarProcesos(Proceso* cabeza) {
 
 void eliminarProceso(Proceso*& cabeza, int id) {
     if (!cabeza) { cout << "Lista vacia.\n"; return; }
-    Proceso* actual = cabeza;
-    Proceso* anterior = NULL;
+    Proceso * actual = cabeza;
+    Proceso * anterior = NULL;
     while (actual && actual->id != id) {
         anterior = actual;
         actual = actual->siguiente;
@@ -101,13 +133,13 @@ void modificarPrioridad(Proceso* cabeza, int id, int nueva) {
 // ============================
 
 void encolar(NodoCola*& frente, NodoCola*& fin, int id, string nombre, int prioridad) {
-    NodoCola* nuevo = new NodoCola{id, nombre, prioridad, NULL};
+    NodoCola * nuevo = new NodoCola{id, nombre, prioridad, NULL};
     if (!frente || prioridad > frente->prioridad) {
         nuevo->siguiente = frente;
         frente = nuevo;
         if (!fin) fin = nuevo;
     } else {
-        NodoCola* aux = frente;
+        NodoCola * aux = frente;
         while (aux->siguiente && aux->siguiente->prioridad >= prioridad)
             aux = aux->siguiente;
         nuevo->siguiente = aux->siguiente;
@@ -147,7 +179,7 @@ void push(Bloque*& tope, string proceso, int tamanio) {
 void pop(Bloque*& tope) {
     if (!tope) { cout << "No hay memoria.\n"; return; }
     cout << "Liberando memoria de: " << tope->proceso << endl;
-    Bloque* temp = tope;
+    Bloque * temp = tope;
     tope = tope->siguiente;
     delete temp;
 }
@@ -181,10 +213,10 @@ void mostrarMenu() {
 }
 
 int main() {
-    Proceso* lista = NULL;
-    NodoCola* frente = NULL;
-    NodoCola* fin = NULL;
-    Bloque* tope = NULL;
+    Proceso * lista = NULL;
+    NodoCola * frente = NULL;
+    NodoCola * fin = NULL;
+    Bloque * tope = NULL;
     int opcion;
 
     do {
@@ -196,29 +228,35 @@ int main() {
             case 1: {
                 int id, pr;
                 string nombre;
-                cout << "ID: "; cin >> id; cin.ignore();
-                cout << "Nombre: "; getline(cin, nombre);
+                
+                id = leerID("ID: ");
+                cout << "Nombre: "; 
+                getline(cin, nombre);
                 pr = leerNumero("Prioridad (1-5): ", 1, 5);
                 insertarProceso(lista, id, nombre, pr);
                 break;
             }
             case 2: {
-                int id; cout << "ID a eliminar: "; cin >> id;
+                int id; 
+                id = leerID("ID a eliminar: ");
                 eliminarProceso(lista, id);
                 break;
             }
-            case 3: mostrarProcesos(lista); break;
+            case 3: 
+                mostrarProcesos(lista); 
+                break;
             case 4: {
                 int id, nueva;
-                cout << "ID: "; cin >> id;
+                id = leerID("ID: ");
                 nueva = leerNumero("Nueva prioridad (1-5): ", 1, 5);
                 modificarPrioridad(lista, id, nueva);
                 break;
             }
             case 5: {
-                if (!lista) cout << "No hay procesos.\n";
+                if (!lista) 
+                    cout << "No hay procesos.\n";
                 else {
-                    Proceso* aux = lista;
+                    Proceso * aux = lista;
                     while (aux) {
                         encolar(frente, fin, aux->id, aux->nombre, aux->prioridad);
                         aux = aux->siguiente;
@@ -227,19 +265,35 @@ int main() {
                 }
                 break;
             }
-            case 6: mostrarCola(frente); break;
-            case 7: desencolar(frente, fin); break;
+            case 6: 
+                mostrarCola(frente); 
+                break;
+            case 7: 
+                desencolar(frente, fin); 
+                break;
             case 8: {
-                string proc; int tam;
-                cin.ignore(); cout << "Proceso: "; getline(cin, proc);
-                tam = leerNumero("TamaÃ±o (MB): ", 1, 9999);
+                string proc; 
+                int tam;
+                cin.ignore(); 
+                cout << "Proceso: "; 
+                getline(cin, proc);
+                tam = leerNumero("Tamaño (MB): ", 1, 9999);
                 push(tope, proc, tam);
                 break;
             }
-            case 9: pop(tope); break;
-            case 10: mostrarMemoria(tope); break;
-            case 0: cout << "Saliendo...\n"; break;
-            default: cout << "Opcion invalida.\n";
+            case 9: 
+                pop(tope); 
+                break;
+            case 10: 
+                mostrarMemoria(tope); 
+                break;
+            case 0: 
+                cout << "Saliendo...\n"; 
+                break;
+            default: 
+                cout << "Opcion invalida.\n";
+                cin.clear();
+                cin.ignore(10000, '\n');
         }
     } while (opcion != 0);
 
